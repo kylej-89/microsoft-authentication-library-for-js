@@ -6,6 +6,7 @@ import { BroadcastService } from "./broadcast.service";
 import { Configuration } from "msal";
 import { MsalAngularConfiguration, defaultMsalAngularConfiguration } from "./msal-angular.configuration";
 import { MSAL_CONFIG, MSAL_CONFIG_ANGULAR } from "./constants";
+export { MsalRouter } from './msal.router';
 
 @NgModule({
   imports: [CommonModule],
@@ -30,6 +31,7 @@ export class MsalModule {
             provide: MSAL_CONFIG_ANGULAR,
             useValue: angularConfig
         },
+        MsalRouter,
         MsalService
       ]
     }
