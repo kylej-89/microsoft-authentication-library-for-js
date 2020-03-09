@@ -34,7 +34,7 @@ export class MsalService extends UserAgentApplication {
     constructor(
         @Inject(MSAL_CONFIG) private msalConfig: Configuration,
         @Inject(MSAL_CONFIG_ANGULAR) private msalAngularConfig: MsalAngularConfiguration,
-        private router: Router,
+        private router: Router = null,
         private broadcastService: BroadcastService
     ) {
         super(buildMsalConfig(msalConfig));
@@ -55,28 +55,6 @@ export class MsalService extends UserAgentApplication {
                 this.setAcquireTokenInProgress(false);
             }
         });
-
-        this.router.events.subscribe(event => {
-            for (var i = 0; i < router.config.length; i++) {
-                if (!router.config[i].canActivate) {
-                    if (this.msalAngularConfig.unprotectedResources) {
-                        if (!this.isUnprotectedResource(router.config[i].path) && !this.isEmpty(router.config[i].path)) {
-                            this.msalAngularConfig.unprotectedResources.push(router.config[i].path);
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    private isUnprotectedResource(url: string): boolean {
-        const unprotectedResources = (this.msalConfig.framework && this.msalConfig.framework.unprotectedResources) || this.msalAngularConfig.unprotectedResources || [];
-
-        return unprotectedResources.some(resource => url.indexOf(resource) > -1);
-    }
-
-    private isEmpty(str: string): boolean {
-        return (typeof str === "undefined" || !str || 0 === str.length);
     }
 
     public getCacheStorage(): AuthCache {
